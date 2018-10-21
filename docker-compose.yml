@@ -1,0 +1,36 @@
+version: '2'
+
+networks:
+  overlay:
+
+volumes:
+  postgres-vol:
+
+services:
+  app:
+    build: .
+    environment:
+      - DATABASE_URL=postgres://postgres:kqnHSqgQ8kR4o5qN@postgres/myartasia
+      - EMAIL_HOST=localhost
+      - EMAIL_PORT=587
+      - EMAIL_HOST_USER=your_bot_email
+      - EMAIL_HOST_PASSWORD=your_bot_password
+      - EMAIL_FROM_DEFAULT=webmaster@localhost
+    depends_on:
+      - postgres
+    networks:
+      - overlay
+    volumes:
+      - .:/opt/app
+    ports:
+      - 8001:80
+
+  postgres:
+    image: postgres:9.6
+    environment:
+      - POSTGRES_DB=orbit
+      - POSTGRES_PASSWORD=kqnHSqgQ8kR4o5qN
+    networks:
+      - overlay
+    volumes:
+      - postgres-vol:/var/lib/postgresql/data
